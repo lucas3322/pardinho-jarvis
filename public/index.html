@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#030409">
+  <title>J.A.R.V.I.S.</title>
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-state="idle">
+  <div class="ambient" aria-hidden="true"></div>
+
+  <header class="top">
+    <div class="brand">
+      <span class="brand-mark">J.A.R.V.I.S.</span>
+    </div>
+    <div class="top-right">
+      <div class="chip" id="connection" role="status">
+        <span class="dot"></span><span id="connection-label">Offline</span>
+      </div>
+      <button class="ctl ctl-sm" id="btn-settings" type="button" aria-label="Ajustes">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="center">
+    <button class="stage" id="stage" type="button" aria-label="Iniciar conversa com o Jarvis">
+      <div class="orb" id="orb"></div>
+    </button>
+
+    <div class="readout" aria-live="polite">
+      <div class="activity" id="tool" hidden>
+        <span class="activity-spinner" aria-hidden="true"></span>
+        <span id="tool-label"></span>
+      </div>
+      <p class="status" id="status">Toque para começar</p>
+      <p class="caption" id="caption"></p>
+    </div>
+  </main>
+
+  <nav class="controls" aria-label="Controles">
+    <button class="ctl" id="btn-mute" type="button" aria-pressed="false" aria-label="Silenciar microfone" disabled>
+      <svg viewBox="0 0 24 24" class="ic-mic" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>
+      <svg viewBox="0 0 24 24" class="ic-mic-off" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M4 4l16 16"/></svg>
+    </button>
+    <button class="ctl ctl-main" id="btn-power" type="button" aria-label="Iniciar conversa">
+      <svg viewBox="0 0 24 24" class="ic-start" aria-hidden="true"><path d="M12 3v8"/><path d="M6.3 6.8a8 8 0 1 0 11.4 0"/></svg>
+      <svg viewBox="0 0 24 24" class="ic-stop" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="2.5"/></svg>
+    </button>
+    <button class="ctl" id="btn-log" type="button" aria-expanded="false" aria-controls="log" aria-label="Mostrar conversa">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6.5h14M5 12h14M5 17.5h9"/></svg>
+    </button>
+  </nav>
+
+  <aside class="log" id="log" aria-label="Conversa" inert>
+    <header class="log-head">
+      <h2>Conversa</h2>
+      <button class="ctl ctl-sm" id="btn-log-close" type="button" aria-label="Fechar conversa">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </header>
+    <ol class="log-list" id="log-list"></ol>
+    <form class="composer" id="composer" autocomplete="off">
+      <input id="composer-input" type="text" placeholder="Digite para o Jarvis…" aria-label="Mensagem" disabled>
+      <button class="ctl ctl-sm" type="submit" aria-label="Enviar" disabled id="composer-send">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+      </button>
+    </form>
+  </aside>
+
+  <dialog class="settings" id="settings" aria-labelledby="settings-title">
+    <form method="dialog" id="settings-form" autocomplete="off">
+      <header class="settings-head">
+        <h2 id="settings-title">Ajustes</h2>
+        <button class="ctl ctl-sm" value="cancel" type="submit" formnovalidate aria-label="Fechar ajustes">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </header>
+
+      <label class="field">
+        <span class="field-label">Seu nome</span>
+        <input id="set-name" type="text" autocomplete="given-name" maxlength="40" placeholder="Como o Jarvis deve te chamar">
+        <span class="field-hint">Ele usa na saudação e, de vez em quando, na conversa.</span>
+      </label>
+
+      <label class="field">
+        <span class="field-label">Chave da OpenAI</span>
+        <input id="set-key" type="password" spellcheck="false" placeholder="sk-…">
+        <span class="field-hint" id="set-key-hint">Fica salva só neste computador.</span>
+      </label>
+
+      <label class="toggle" id="set-wake-row" hidden>
+        <span class="toggle-text">
+          <span class="field-label">Ouvir “Jarvis”</span>
+          <span class="field-hint">Diga “Jarvis” a qualquer momento, mesmo com a janela fechada. O reconhecimento acontece só no Mac; nenhum áudio sai daqui até a conversa começar.</span>
+        </span>
+        <input id="set-wake" type="checkbox" role="switch">
+      </label>
+
+      <label class="field">
+        <span class="field-label">Token do ClickUp</span>
+        <input id="set-clickup" type="password" spellcheck="false" placeholder="pk_…">
+        <span class="field-hint" id="set-clickup-hint">Opcional. Gere no ClickUp em Ajustes → Apps → API Token.</span>
+      </label>
+
+      <div class="field">
+        <label class="field-label" for="set-vault">Segundo cérebro</label>
+        <div class="path-row">
+          <input id="set-vault" type="text" spellcheck="false" placeholder="~/Documents/Segundo Cérebro">
+          <button class="btn-secondary" id="set-vault-pick" type="button" hidden>Escolher…</button>
+        </div>
+        <span class="field-hint">Pasta das suas notas, no formato do Obsidian. Uma pasta vazia ganha a estrutura Inbox, Projetos, Áreas, Recursos, Arquivo e Diário.</span>
+      </div>
+
+      <label class="field">
+        <span class="field-label">Voz</span>
+        <select id="set-voice"></select>
+      </label>
+
+      <label class="field">
+        <span class="field-label">Velocidade da fala <output id="set-speed-out">1.00×</output></span>
+        <input id="set-speed" type="range" min="0.8" max="1.2" step="0.05" value="1">
+      </label>
+
+      <p class="field-hint">Voz e velocidade valem a partir da próxima conversa.</p>
+      <p class="settings-error" id="settings-error" role="alert"></p>
+
+      <button class="btn-primary" id="settings-save" type="submit" value="save">Salvar</button>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="alert" hidden></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

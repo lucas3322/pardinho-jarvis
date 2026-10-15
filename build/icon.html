@@ -1,0 +1,62 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>html,body{margin:0;background:transparent}#stage{position:absolute;left:0;top:0;width:824px;height:824px}</style>
+<div id="stage"></div>
+<script type="module">
+  // Desenha o ícone do app (1024×1024, grade de ícones do macOS) a partir do orb.
+  import { Orb } from "/orb.js";
+
+  const stage = document.getElementById("stage");
+  const orb = new Orb(stage);
+  orb.reduced = { matches: false };
+  orb.setState("speaking");
+  orb.color = [[255, 92, 54], [255, 88, 170], [168, 116, 255], [120, 200, 255]];
+  orb.dpr = 2.6; // linhas mais grossas: o ícone aparece pequeno no Dock
+  orb.w = orb.h = 824;
+  orb.canvas.width = orb.canvas.height = 824;
+  orb.glow.width = orb.glow.height = 412;
+  orb.phase = 7.3;
+  orb.time = 3;
+  orb.treble = 0.5;
+  orb.glowAmt = 1;
+  orb.frame = () => {}; // congela: queremos um quadro estático
+  orb.draw(0.42);
+
+  const out = document.createElement("canvas");
+  out.width = out.height = 1024;
+  const ctx = out.getContext("2d");
+  const inset = 100, size = 824, r = size * 0.2237;
+
+  // Corpo do ícone: quadrado arredondado escuro com leve gradiente.
+  ctx.save();
+  ctx.beginPath();
+  ctx.roundRect(inset, inset, size, size, r);
+  ctx.clip();
+  const bg = ctx.createRadialGradient(512, 470, 40, 512, 512, 560);
+  bg.addColorStop(0, "#1a1030");
+  bg.addColorStop(1, "#04050b");
+  ctx.fillStyle = bg;
+  ctx.fillRect(inset, inset, size, size);
+
+  ctx.filter = "blur(26px)";
+  ctx.globalAlpha = 0.9;
+  ctx.drawImage(orb.glow, inset, inset, size, size);
+  ctx.filter = "none";
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = "screen";
+  ctx.drawImage(orb.canvas, inset, inset, size, size);
+  ctx.globalCompositeOperation = "lighter";
+  ctx.globalAlpha = 0.55;
+  ctx.drawImage(orb.canvas, inset, inset, size, size);
+  ctx.globalAlpha = 1;
+  ctx.restore();
+
+  // Borda sutil: luz batendo no material.
+  ctx.beginPath();
+  ctx.roundRect(inset + 1, inset + 1, size - 2, size - 2, r);
+  ctx.strokeStyle = "rgba(255,255,255,0.10)";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  window.iconDataURL = out.toDataURL("image/png");
+</script>

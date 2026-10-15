@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleIdentifier</key>
+  <string>com.lucaspardinho.jarvis.helper</string>
+  <key>CFBundleName</key>
+  <string>Jarvis</string>
+  <key>NSMicrophoneUsageDescription</key>
+  <string>O Jarvis escuta o microfone para reconhecer quando você chama "Jarvis".</string>
+  <key>NSSpeechRecognitionUsageDescription</key>
+  <string>O Jarvis reconhece a palavra "Jarvis" no próprio Mac, sem enviar áudio para a internet.</string>
+  <key>NSCalendarsUsageDescription</key>
+  <string>O Jarvis lê e cria eventos na sua agenda quando você pede.</string>
+  <key>NSCalendarsFullAccessUsageDescription</key>
+  <string>O Jarvis lê e cria eventos na sua agenda quando você pede.</string>
+  <key>NSRemindersUsageDescription</key>
+  <string>O Jarvis lê e cria lembretes quando você pede.</string>
+  <key>NSRemindersFullAccessUsageDescription</key>
+  <string>O Jarvis lê e cria lembretes quando você pede.</string>
+</dict>
+</plist>
